@@ -5,7 +5,7 @@ const Persons = ({person}) => {
     <div>
     <h2>numbers</h2>
              {person.map((p, index) => (
-          <li key={index}>{p.name} : {p.Number}</li>
+          <li key={index}>{p.name} : {p.number}</li>
         ))}
      
     </div>

@@ -1,19 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Form from './components/Form.jsx'
 import Filter from './components/Filter.jsx'
 import Persons from './components/Persons.jsx'
+import axios from 'axios'
 
 
 function App() {
-  const [person, setPerson] = useState([
-  { name: 'Arto Hellas', Number: '040-123456', id: 1 },
-  { name: 'Ada Lovelace', Number: '39-44-5323523', id: 2 },
-  { name: 'Dan Abramov', Number: '12-43-234345', id: 3 },
-  { name: 'Mary Poppendieck', Number: '39-23-6423122', id: 4 }
-])
+  const [person, setPerson] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNumber] = useState('')
    const [filter, setFilter] = useState('')
+
+   useEffect(()=>{
+    axios.get('http://localhost:3000/persons').then(response =>{
+      setPerson(response.data)
+    })
+   }, [])
 
   const addName=(event)=>{
     event.preventDefault()
@@ -27,7 +29,8 @@ function App() {
 
     const newperson= {
       name:newName,
-      Number:newNumber
+      number:newNumber,
+      id: person.length + 1
     }
 
     setPerson(person.concat(newperson))
