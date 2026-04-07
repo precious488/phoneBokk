@@ -4,6 +4,7 @@ import Filter from './components/Filter.jsx'
 import Persons from './components/Persons.jsx'
 import axios from 'axios'
 import phoneService from './services/phoneService.jsx'
+import NoMessage from './components/NoMessage.jsx'
 
 
 
@@ -12,6 +13,7 @@ function App() {
   const [newName, setNewName] = useState('')
   const [newNumber, setNumber] = useState('')
    const [filter, setFilter] = useState('')
+   const [notificationMessage, setNotificationMessage] = useState('some notification')
 
    useEffect(()=>{
 
@@ -38,14 +40,14 @@ function App() {
       id: person.length + 1
     }
     phoneService.create(newperson).then(returnedNote=>{setPerson(person.concat(returnedNote))
+      setNotificationMessage(`the name ${newperson.name} with number ${newperson.number} added`)
+      setTimeout(()=>{
+        setNotificationMessage(null)
+      }, 5000)
+           
+    })
       setNewName('')
       setNumber('')
-    })
-
-    
-
-   
-
     // setPerson(person.concat(newperson))
     // setNewName('')
     // setNumber('')
@@ -78,6 +80,10 @@ const handleDelete =(id, name)=>{
 
   phoneService.deletePerson(id).then(()=>{
     setPerson(person.filter(p=> p.id !=id))
+    setNotificationMessage(`the id ${id} deleted`)
+    setTimeout(()=>{
+      setNotificationMessage(null)
+    }, 2000)
   })
 
   .catch(error=>{
@@ -91,6 +97,7 @@ const handleDelete =(id, name)=>{
   return (
     <div>
       <h2>phonebook</h2>
+      <NoMessage message={notificationMessage}/>
       <Filter changeFilter={handleFilter} filter={filter}/>
       <h2>add new number</h2>
 
